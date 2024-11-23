@@ -9,7 +9,7 @@ let k = 30;
 let columns, rows;
 
 function setup() {
-    createCanvas(windowWidth-1, windowHeight-1);
+    createCanvas(windowWidth, windowHeight);
 
     columns = floor(width / cellSize);
     rows = floor(height / cellSize);
