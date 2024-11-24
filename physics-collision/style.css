@@ -1,8 +1,56 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
 }
 
 canvas {
   display: block;
+}
+
+/* UI Container */
+#ui {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+/* Debug Options Container */
+#debugOptions {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  border-radius: 4px;
+}
+
+#debugOptions h3 {
+  margin: 0;
+}
+
+#debugOptions .separator {
+  height: 1px;
+  background-color: #000000;
+  margin: 5px 0;
+  width: 100%;
+}
+
+#debugOptions label {
+  display: flex;
+  cursor: pointer;
+}
+
+/* Reset button styling */
+#resetBtn {
+  background: #c94e4e;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 10px;
+  width: 100%;
 }

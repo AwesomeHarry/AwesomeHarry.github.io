@@ -212,16 +212,21 @@ function setup() {
     createCanvas(windowWidth, windowHeight);
 
     for (let i = 0; i < BALL_COUNT; i++) {
-        let ball = new Ball(
-            createVector(random(width), random(height)),
-            createVector(random(-15, 15), random(-15, 15)),
-            random(BALL_SIZE_MIN, BALL_SIZE_MAX),
-            1,
-            createVector(random(255), random(255), random(255))
-        );
-        ball.id = i;
-        balls.push(ball);
+        makeNewRandomBall();
     }
+
+    const resetBtn = select('#resetBtn');
+    resetBtn.mousePressed(() => {
+        balls = [];
+        partitions = {};
+        setup();
+    });
+
+    select('#debugShowGrid').changed(() => DEBUG.showGrid = select('#debugShowGrid').checked());
+    select('#debugShowCellCounts').changed(() => DEBUG.showCellCounts = select('#debugShowCellCounts').checked());
+    select('#debugShowVelocityVectors').changed(() => DEBUG.showVelocityVectors = select('#debugShowVelocityVectors').checked());
+    select('#debugShowBallCells').changed(() => DEBUG.showBallCells = select('#debugShowBallCells').checked());
+    select('#debugShowBallIds').changed(() => DEBUG.showBallIds = select('#debugShowBallIds').checked());
 }
 
 function draw() {
@@ -229,7 +234,7 @@ function draw() {
 
     background(12);
 
-    if (mouseIsPressed) {
+    if (mouseIsPressed && !isMouseOverUI()) {
         let mousePos = createVector(mouseX, mouseY);
         balls.forEach(ball => {
             let direction = p5.Vector.sub(mousePos, ball.position);
@@ -253,6 +258,23 @@ function draw() {
     checkCollisions(partitions);
 }
 
+function makeNewRandomBall() {
+    let ball = new Ball(
+        createVector(random(width), random(height)),
+        createVector(random(-15, 15), random(-15, 15)),
+        random(BALL_SIZE_MIN, BALL_SIZE_MAX),
+        1,
+        createVector(random(255), random(255), random(255))
+    );
+    ball.id = balls.length;
+    balls.push(ball);
+}
+
 function lerp(start, end, t) {
     return start * (1 - t) + end * t;
+}
+
+function isMouseOverUI() {
+    const hoveredElement = document.elementFromPoint(mouseX, mouseY);
+    return hoveredElement.closest('#ui') !== null;
 }
