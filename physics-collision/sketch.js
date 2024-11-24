@@ -1,19 +1,21 @@
 /// <reference path="../libraries/p5/global.d.ts" />
 
 const GRAVITY = { x: 0, y: 9.81 };
-let TIME_SCALE = 1.0;
+const TIME_SCALE = 1.0;
+const SUB_STEPS = 1;
 const WALL_RESTITUTION = 0.9;
 
-const BALL_SIZE = 10;
-const BALL_COUNT = 500;
-const PART_SIZE = 100;
+const BALL_SIZE_MIN = 10;
+const BALL_SIZE_MAX = 20;
+const BALL_COUNT = 200;
+const PART_SIZE = 55;
 
 const DEBUG = {
     showGrid: true,
     showCellCounts: true,
     showVelocityLines: false,
     showBallCells: true,
-    showBallIds: true
+    showBallIds: false
 }
 
 class Ball {
@@ -56,8 +58,24 @@ class Ball {
     draw() {
         fill(this.color.x, this.color.y, this.color.z);
         strokeWeight(0);
-        stroke(255, 255);
+        stroke(color(255));
         circle(this.position.x, this.position.y, 2 * this.radius);
+
+        if (DEBUG.showVelocityVectors) {
+            stroke(0, 255, 0);
+            strokeWeight(2);
+            let velEnd = p5.Vector.add(this.position, p5.Vector.mult(this.velocity, 2));
+            line(this.position.x, this.position.y, velEnd.x, velEnd.y);
+        }
+
+        if (DEBUG.showBallIds) {
+            fill(255);
+            stroke(0);
+            strokeWeight(2);
+            textAlign(CENTER, CENTER);
+            textSize(8);
+            text(this.id, this.position.x, this.position.y);
+        }
     }
 }
 
@@ -197,7 +215,7 @@ function setup() {
         let ball = new Ball(
             createVector(random(width), random(height)),
             createVector(random(-15, 15), random(-15, 15)),
-            BALL_SIZE,
+            random(BALL_SIZE_MIN, BALL_SIZE_MAX),
             1,
             createVector(random(255), random(255), random(255))
         );
@@ -207,7 +225,7 @@ function setup() {
 }
 
 function draw() {
-    const ts = (deltaTime / 100) * TIME_SCALE;
+    const ts = (deltaTime / 100) * TIME_SCALE / SUB_STEPS;
 
     background(12);
 
@@ -229,21 +247,6 @@ function draw() {
         ball.move(ts);
         ball.handleEdgeCollisions(width, height);
         ball.draw();
-
-        if (DEBUG.showVelocityLines) {
-            stroke(255, 0, 0);
-            strokeWeight(1);
-            line(ball.position.x, ball.position.y, ball.position.x + ball.velocity.x, ball.position.y + ball.velocity.y);
-        }
-
-        if (DEBUG.showBallIds) {
-            fill(255);
-            stroke(0);
-            strokeWeight(2);
-            textAlign(CENTER, CENTER);
-            textSize(8);
-            text(ball.id, ball.position.x, ball.position.y);
-        }
     });
 
     // Check Collisions
