@@ -2,7 +2,7 @@
 
 const GRAVITY = { x: 0, y: 9.81 };
 const TIME_SCALE = 1.0;
-const SUB_STEPS = 1;
+const SUB_STEPS = 2;
 const WALL_RESTITUTION = 0.9;
 
 const BALL_SIZE_MIN = 10;
@@ -15,7 +15,7 @@ const DEBUG = {
     showCellCounts: true,
     showVelocityLines: false,
     showBallCells: true,
-    showBallIds: false
+    showBallIds: true
 }
 
 class Ball {
